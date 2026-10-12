@@ -1,0 +1,152 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IntervAI - Mock Interview</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/voice-interview.css') }}">
+</head>
+<body>
+<div class="voice-container">
+    <div class="voice-header">
+        <h1>🤖 {{ category_name }}</h1>
+        <a href="{{ url_for('dashboard') }}">← Dashboard</a>
+    </div>
+
+    <p>Question {{ current }} of {{ total }}</p>
+
+    <div class="question-card">
+        <h2 id="questionText">{{ question }}</h2>
+    </div>
+
+    <div class="voice-buttons">
+        <button type="button" onclick="speakQuestion()">🔊 Listen</button>
+        <button type="button" id="micButton" onclick="toggleMic()">🎤 Speak Answer</button>
+        <button type="button" onclick="stopSpeaking()">⏹ Stop Voice</button>
+    </div>
+
+    <p id="voiceStatus" class="voice-status">
+        Listen to the question, then type or speak your answer.
+    </p>
+
+    <form method="POST">
+        <label for="answer">Your Answer</label>
+        <textarea id="answer" name="answer"
+                  placeholder="Type your answer or use the microphone..."
+                  required></textarea>
+
+        {% if error %}
+            <p class="voice-status">{{ error }}</p>
+        {% endif %}
+
+        <button type="submit">Submit &amp; Next →</button>
+    </form>
+
+    <p><a href="{{ url_for('dashboard') }}">Exit Interview</a></p>
+</div>
+
+<script>
+function speakQuestion() {
+    if (!("speechSynthesis" in window)) {
+        document.getElementById("voiceStatus").textContent =
+            "Text-to-speech is not supported in this browser.";
+        return;
+    }
+
+    window.speechSynthesis.cancel();
+
+    const text = document.getElementById("questionText").innerText;
+    const speech = new SpeechSynthesisUtterance(text);
+    speech.lang = "en-IN";
+    speech.rate = 0.9;
+
+    speech.onstart = () => {
+        document.getElementById("voiceStatus").textContent =
+            "🔊 Reading the question...";
+    };
+
+    speech.onend = () => {
+        document.getElementById("voiceStatus").textContent =
+            "Question finished. You can answer now.";
+    };
+
+    window.speechSynthesis.speak(speech);
+}
+
+function stopSpeaking() {
+    if ("speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+    }
+    document.getElementById("voiceStatus").textContent = "Voice stopped.";
+}
+
+let recognition = null;
+let listening = false;
+
+function toggleMic() {
+    const SpeechRecognition =
+        window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+        document.getElementById("voiceStatus").textContent =
+            "Speech recognition is unavailable. Try Chrome or type your answer.";
+        return;
+    }
+
+    if (listening && recognition) {
+        recognition.stop();
+        return;
+    }
+
+    recognition = new SpeechRecognition();
+    recognition.lang = "en-IN";
+    recognition.continuous = true;
+    recognition.interimResults = true;
+
+    const answerBox = document.getElementById("answer");
+    const status = document.getElementById("voiceStatus");
+    let finalTranscript = "";
+
+    recognition.onstart = function() {
+        listening = true;
+        document.getElementById("micButton").textContent = "⏹ Stop Microphone";
+        status.textContent = "🎤 Listening... Speak clearly.";
+    };
+
+    recognition.onresult = function(event) {
+        let interimTranscript = "";
+
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+            const transcript = event.results[i][0].transcript;
+
+            if (event.results[i].isFinal) {
+                finalTranscript += transcript + " ";
+            } else {
+                interimTranscript += transcript;
+            }
+        }
+
+        answerBox.value = (finalTranscript + interimTranscript).trim();
+    };
+
+    recognition.onerror = function(event) {
+        status.textContent =
+            "Microphone error: " + event.error +
+            ". Check microphone permission or type your answer.";
+    };
+
+    recognition.onend = function() {
+        listening = false;
+        document.getElementById("micButton").textContent = "🎤 Speak Answer";
+
+        if (answerBox.value.trim()) {
+            status.textContent = "Answer captured. Review it before submitting.";
+        }
+    };
+
+    recognition.start();
+}
+</script>
+</body>
+</html>

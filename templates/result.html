@@ -1,0 +1,299 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IntervAI | Interview Results</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/voice-interview.css') }}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            padding: 28px 16px;
+            font-family: Arial, sans-serif;
+            color: #f1f5f9;
+            background:
+                radial-gradient(ellipse at top left, #25205a 0%, transparent 45%),
+                radial-gradient(ellipse at bottom right, #123c60 0%, transparent 40%),
+                #080d1b;
+        }
+
+        .voice-container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 28px;
+            background: rgba(17, 24, 45, 0.94);
+            border: 1px solid #303a59;
+            border-radius: 22px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .voice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+
+        .voice-header h1 {
+            margin: 0;
+            font-size: 27px;
+        }
+
+        a {
+            color: #c4b5fd;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #ffffff;
+        }
+
+        .hero {
+            padding: 28px 20px;
+            text-align: center;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #4338ca, #7c3aed, #2563eb);
+        }
+
+        .hero p {
+            margin: 0 0 10px;
+            color: #e0e7ff;
+        }
+
+        .hero h2 {
+            margin: 10px 0;
+            font-size: clamp(42px, 8vw, 65px);
+        }
+
+        .hero .category {
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 14px;
+            margin: 22px 0 32px;
+        }
+
+        .stat {
+            padding: 20px 12px;
+            text-align: center;
+            background: #171f36;
+            border: 1px solid #303a59;
+            border-radius: 15px;
+        }
+
+        .stat p {
+            margin: 0 0 12px;
+            font-size: 14px;
+            color: #cbd5e1;
+        }
+
+        .stat h3 {
+            margin: 0;
+            font-size: 32px;
+        }
+
+        .green { color: #4ade80; }
+        .yellow { color: #facc15; }
+        .red { color: #fb7185; }
+        .blue { color: #60a5fa; }
+
+        .section-title {
+            margin: 28px 0 16px;
+            font-size: 23px;
+        }
+
+        .answer-review {
+            padding: 20px;
+            margin: 15px 0;
+            background: #121a2e;
+            border: 1px solid #303a59;
+            border-radius: 15px;
+            overflow-wrap: anywhere;
+        }
+
+        .answer-review h3 {
+            margin-top: 0;
+            font-size: 18px;
+            line-height: 1.5;
+        }
+
+        .answer-review p {
+            line-height: 1.7;
+            color: #dbe4f0;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 7px 12px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .status-correct {
+            color: #86efac;
+            background: #123b2c;
+        }
+
+        .status-partial {
+            color: #fde68a;
+            background: #493515;
+        }
+
+        .status-incorrect {
+            color: #fda4af;
+            background: #4a1c2b;
+        }
+
+        .action-link {
+            display: inline-block;
+            padding: 13px 18px;
+            margin: 8px 8px 0 0;
+            color: white;
+            font-weight: bold;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            border-radius: 10px;
+        }
+
+        .action-link:hover {
+            opacity: 0.88;
+        }
+
+        .note {
+            margin-top: 24px;
+            padding: 14px;
+            border-radius: 10px;
+            color: #cbd5e1;
+            background: #1b263e;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 650px) {
+            .voice-container {
+                padding: 18px 14px;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .voice-header h1 {
+                font-size: 22px;
+            }
+
+            .answer-review {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="voice-container">
+
+    <div class="voice-header">
+        <h1>🎉 Interview Results</h1>
+        <a href="{{ url_for('dashboard') }}">← Dashboard</a>
+    </div>
+
+    <div class="hero">
+        <p>YOUR FINAL SCORE</p>
+        <h2>{{ result['score'] }}<span style="font-size:25px"> / 100</span></h2>
+        <p class="category">{{ category_name }}</p>
+        <p>Completed: {{ result['completed_at'] }}</p>
+    </div>
+
+    <div class="stats">
+        <div class="stat">
+            <p>✅ Correct</p>
+            <h3 class="green">{{ result['correct_count'] }}</h3>
+        </div>
+
+        <div class="stat">
+            <p>🟡 Partially Correct</p>
+            <h3 class="yellow">{{ result['partial_count'] }}</h3>
+        </div>
+
+        <div class="stat">
+            <p>❌ Incorrect</p>
+            <h3 class="red">{{ result['incorrect_count'] }}</h3>
+        </div>
+
+        <div class="stat">
+            <p>📝 Total Questions</p>
+            <h3 class="blue">{{ result['total_questions'] }}</h3>
+        </div>
+    </div>
+
+    <h2 class="section-title">📋 Answer Review</h2>
+
+    {% for item in answers %}
+    <div class="answer-review">
+
+        <h3>Q{{ loop.index }}. {{ item['question'] }}</h3>
+
+        {% if item['status'] == 'Correct' %}
+            <span class="status status-correct">✓ Correct</span>
+        {% elif item['status'] == 'Partially Correct' %}
+            <span class="status status-partial">◐ Partially Correct</span>
+        {% else %}
+            <span class="status status-incorrect">✕ Incorrect</span>
+        {% endif %}
+
+        <p><strong>Your Answer:</strong><br>
+            {{ item['user_answer'] }}
+        </p>
+
+        <p><strong>Sample Answer:</strong><br>
+            {{ item['expected_answer'] }}
+        </p>
+
+        <p><strong>Feedback:</strong><br>
+            {{ item['feedback'] }}
+        </p>
+
+        <p><strong>Points:</strong> {{ item['score'] }} / 10</p>
+
+    </div>
+    {% endfor %}
+
+    <div class="note">
+        <strong>Note:</strong> This result uses exact-answer checking for
+        aptitude questions and keyword-based evaluation for open-ended
+        questions. It is intended for practice, not as a definitive
+        assessment of your knowledge.
+    </div>
+
+    <div style="margin-top:24px">
+        <a class="action-link"
+           href="{{ url_for('mock_interview', category=result['category'], restart=1) }}">
+            🔄 Try Again
+        </a>
+
+        <a class="action-link"
+           href="{{ url_for('interview_history') }}">
+            📊 View Interview History
+        </a>
+    </div>
+
+</div>
+</body>
+</html>

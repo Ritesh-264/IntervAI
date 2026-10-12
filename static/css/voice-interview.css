@@ -1,0 +1,103 @@
+/* IntervAI Voice Interview Styles */
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0b1020;
+    color: #f5f7ff;
+}
+
+.voice-container {
+    width: 90%;
+    max-width: 850px;
+    margin: 40px auto;
+    padding: 28px;
+    background: #151d33;
+    border: 1px solid #303c5c;
+    border-radius: 18px;
+    box-sizing: border-box;
+}
+
+.voice-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.voice-container h1 {
+    color: #a78bfa;
+}
+
+.question-card {
+    margin: 25px 0;
+    padding: 24px;
+    background: #202b46;
+    border-radius: 14px;
+}
+
+.question-card h2 {
+    font-size: 25px;
+    line-height: 1.5;
+}
+
+.voice-buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+}
+
+.voice-buttons button,
+.voice-container button {
+    padding: 12px 18px;
+    border: none;
+    border-radius: 9px;
+    background: #7c3aed;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.voice-container button:hover {
+    background: #6d28d9;
+}
+
+.voice-container textarea {
+    width: 100%;
+    min-height: 180px;
+    padding: 15px;
+    box-sizing: border-box;
+    background: #0e1629;
+    color: white;
+    border: 1px solid #465474;
+    border-radius: 10px;
+    font-size: 16px;
+    resize: vertical;
+}
+
+.voice-container a {
+    color: #c4b5fd;
+}
+
+.voice-status {
+    margin: 12px 0;
+    color: #c4b5fd;
+}
+
+@media (max-width: 600px) {
+    .voice-container {
+        width: 94%;
+        margin: 18px auto;
+        padding: 18px;
+    }
+
+    .question-card h2 {
+        font-size: 21px;
+    }
+
+    .voice-buttons button {
+        width: 100%;
+    }
+}

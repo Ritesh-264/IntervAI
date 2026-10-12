@@ -1,66 +1,168 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Login - IntervAI</title>
+    <title>Login | IntervAI</title>
 
     <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/style.css') }}">
+          href="{{ url_for('static', filename='css/login.css') }}">
 </head>
 
 <body>
 
-<div class="auth-container">
+    <div class="background-glow glow-one"></div>
+    <div class="background-glow glow-two"></div>
 
-    <div class="auth-card">
+    <header class="topbar">
 
-        <div class="auth-logo">
-            🤖 Interv<span>AI</span>
-        </div>
+        <!-- IntervAI Logo -->
+        <a href="/" class="brand">
+            <span class="brand-icon">🤖</span>
+            Interv<span class="brand-ai">AI</span>
+        </a>
 
-        <h2>Welcome Back!</h2>
+        <!-- Back to Home -->
+        <a href="/" class="back-home">
+            ← Back to Home
+        </a>
 
-        <p class="auth-subtitle">
-            Login to continue your interview preparation.
+    </header>
+
+    <main class="page-container">
+
+        <section class="login-card">
+
+            <div class="welcome-icon">🤖</div>
+
+            <div class="welcome-label">
+                YOUR AI INTERVIEW PARTNER
+            </div>
+
+            <h1>Welcome <span>Back!</span></h1>
+
+            <p class="subtitle">
+                Login to continue your interview preparation.
+            </p>
+
+            
+
+            <!-- Login Form -->
+            <form action="{{ url_for('login') }}" method="POST">
+
+                <div class="form-group">
+
+                    <label for="email">Email Address</label>
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">✉</span>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="you@example.com"
+                            autocomplete="email"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+
+                    <div class="password-heading">
+                        <label for="password">Password</label>
+                    </div>
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">🔒</span>
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="toggle-password"
+                            id="togglePassword"
+                            aria-label="Show password"
+                        >
+                            Show
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <button type="submit" class="login-submit">
+
+                    <span>Login to Your Account</span>
+
+                    <span class="button-arrow">→</span>
+
+                </button>
+
+            </form>
+
+            <div class="separator">
+                <span>YOUR NEXT OPPORTUNITY STARTS HERE</span>
+            </div>
+
+            <!-- Register Link -->
+            <p class="register-text">
+                Don't have an account?
+                <a href="{{ url_for('register') }}">
+                    Create Account
+                </a>
+            </p>
+
+            <div class="secure-note">
+                <span>🔐</span>
+                <span>
+                    Your account is protected by secure login.
+                </span>
+            </div>
+
+        </section>
+
+        <p class="page-footer">
+            © 2026 IntervAI · Prepare Smarter. Interview Better.
         </p>
 
-        <form method="POST" action="/login">
+    </main>
 
-            <label>Email Address</label>
+    <!-- Show / Hide Password -->
+    <script>
+        const togglePassword = document.getElementById("togglePassword");
+        const passwordInput = document.getElementById("password");
 
-            <input
-                type="email"
-                name="email"
-                placeholder="Enter your email"
-                required
-            >
+        togglePassword.addEventListener("click", function () {
 
-            <label>Password</label>
+            const isPassword = passwordInput.type === "password";
 
-            <input
-                type="password"
-                name="password"
-                placeholder="Enter your password"
-                required
-            >
+            passwordInput.type = isPassword ? "text" : "password";
 
-            <button type="submit" class="primary-btn auth-btn">
-                Login
-            </button>
+            togglePassword.textContent = isPassword ? "Hide" : "Show";
 
-        </form>
+            togglePassword.setAttribute(
+                "aria-label",
+                isPassword ? "Hide password" : "Show password"
+            );
 
-        <p class="auth-footer">
-            Don't have an account?
-            <a href="/register">Create Account</a>
-        </p>
-
-    </div>
-
-</div>
+        });
+    </script>
 
 </body>
 </html>
+```

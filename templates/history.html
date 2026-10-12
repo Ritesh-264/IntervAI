@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview History | IntervAI</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/history.css') }}">
+</head>
+<body>
+
+<div class="glow glow-one"></div>
+<div class="glow glow-two"></div>
+
+<header class="topbar">
+    <a href="{{ url_for('dashboard') }}" class="brand">
+        <span class="brand-icon">✦</span> IntervAI
+    </a>
+    <a href="{{ url_for('dashboard') }}" class="back-btn">
+        ← Dashboard
+    </a>
+</header>
+
+<main class="container">
+
+    <section class="page-heading">
+        <div class="eyebrow">YOUR PROGRESS</div>
+        <h1>Interview <span>History</span></h1>
+        <p>Track your practice sessions and improve your performance.</p>
+    </section>
+
+    {% if interviews %}
+        <div class="history-list">
+
+        {% for interview in interviews %}
+            <article class="history-card">
+
+                <div class="card-top">
+                    <div class="test-icon">✧</div>
+                    <div class="test-info">
+                        <h2>{{ interview.test_name or interview.interview_type or 'Aptitude Test' }}</h2>
+                        <p>{{ interview.created_at or interview.date or '' }}</p>
+                    </div>
+                    <span class="status">Completed</span>
+                </div>
+
+                <div class="score-section">
+                    <div class="score-number">
+                        <span class="score">
+                            {{ interview.score if interview.score is not none else 0 }}
+                        </span>
+                        <span class="out-of">/ 100</span>
+                        <p>Overall Score</p>
+                    </div>
+
+                    <div class="score-bar">
+                        <div class="score-fill"
+                             style="width: {{ [100, [0, interview.score|default(0)|int]|max]|min }}%">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats">
+                    <div class="stat correct">
+                        <span>✓</span>
+                        <div>
+                            <strong>{{ interview.correct|default(0) }}</strong>
+                            <small>Correct</small>
+                        </div>
+                    </div>
+
+                    <div class="stat partial">
+                        <span>◐</span>
+                        <div>
+                            <strong>{{ interview.partial|default(0) }}</strong>
+                            <small>Partial</small>
+                        </div>
+                    </div>
+
+                    <div class="stat incorrect">
+                        <span>✕</span>
+                        <div>
+                            <strong>{{ interview.incorrect|default(0) }}</strong>
+                            <small>Incorrect</small>
+                        </div>
+                    </div>
+                </div>
+
+                <a class="details-btn"
+                   href="{{ url_for('interview_result', result_id=interview.id) }}">
+                    View Details <span>→</span>
+                </a>
+
+            </article>
+        {% endfor %}
+
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">✧</div>
+            <h2>No interviews yet</h2>
+            <p>Your completed practice sessions will appear here.</p>
+            <a href="{{ url_for('dashboard') }}" class="details-btn">
+                Start Practicing →
+            </a>
+        </div>
+    {% endif %}
+
+</main>
+</body>
+</html>

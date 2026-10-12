@@ -3,11 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>Create Account - IntervAI</title>
+    <title>Register - IntervAI</title>
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='css/style.css') }}">
@@ -23,73 +21,55 @@
             🤖 Interv<span>AI</span>
         </div>
 
-        <h2>Create Your Account</h2>
+        <h2>Create Account</h2>
 
         <p class="auth-subtitle">
-            Start your personalized interview preparation.
+            Start your AI-powered interview preparation.
         </p>
 
+        <form method="POST" action="{{ url_for('register') }}">
 
-        <form method="POST" action="/register">
-
-            <label>Full Name</label>
+            <label for="name">Full Name</label>
 
             <input
                 type="text"
+                id="name"
                 name="name"
                 placeholder="Enter your full name"
                 required
             >
 
-
-            <label>Email Address</label>
+            <label for="email">Email Address</label>
 
             <input
                 type="email"
+                id="email"
                 name="email"
                 placeholder="Enter your email"
                 required
             >
 
-
-            <label>Password</label>
+            <label for="password">Password</label>
 
             <input
                 type="password"
+                id="password"
                 name="password"
-                placeholder="Create password"
+                placeholder="Create a password"
                 required
             >
 
-
-            <label>Confirm Password</label>
-
-            <input
-                type="password"
-                name="confirm_password"
-                placeholder="Confirm password"
-                required
-            >
-
-
-            <button type="submit"
-                    class="primary-btn auth-btn">
-
+            <button type="submit" class="primary-btn auth-btn">
                 Create Account
-
             </button>
 
         </form>
 
-
         <p class="auth-footer">
-
             Already have an account?
-
-            <a href="/login">
+            <a href="{{ url_for('login') }}" class="login-btn"></a>
                 Login
             </a>
-
         </p>
 
     </div>
