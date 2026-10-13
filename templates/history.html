@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -55,9 +54,9 @@
                     </div>
 
                     <div class="score-bar">
-                        <div class="score-fill"
-                             style="width: {{ [100, [0, interview.score|default(0)|int]|max]|min }}%">
-                        </div>
+                        {% set score_value = interview.score|default(0, true)|int %}
+                        {% set score_width = 100 if score_value > 100 else (0 if score_value < 0 else score_value) %}
+                        <div class="score-fill" data-width="{{ score_width }}"></div>
                     </div>
                 </div>
 
@@ -108,5 +107,12 @@
     {% endif %}
 
 </main>
+
+<script>
+    document.querySelectorAll('.score-fill').forEach(function (el) {
+        el.style.width = el.dataset.width + '%';
+    });
+</script>
+
 </body>
 </html>
